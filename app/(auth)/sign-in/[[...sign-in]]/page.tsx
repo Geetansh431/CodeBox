@@ -6,15 +6,15 @@ import Image from 'next/image'
 
 export default function SignInPage() {
     return (
-        <div className="min-h-screen grid w-full items-center bg-zinc-100 px-4 font-mono text-sm">
+        <div className="min-h-screen grid w-full items-center bg-zinc-900 px-4 font-mono text-sm">
             <SignIn.Root>
                 <SignIn.Step
                     name="start"
-                    className="mx-auto w-full sm:w-96 space-y-6 bg-white px-4 py-8 border-4 border-black shadow-[8px_8px_0_0_#000]"
+                    className="mx-auto w-full sm:w-96 space-y-6 bg-zinc-800 px-4 py-8 border-4 border-black shadow-[8px_8px_0_0_#000]"
                 >
                     <header className="text-center flex flex-col items-center">
                         <Image src={'/crown.png'} alt="logo" width={40} height={40}/>
-                        <h1 className="mt-3 text-base font-bold tracking-wide text-black uppercase">
+                        <h1 className="mt-3 text-base font-bold tracking-wide text-yellow-400 uppercase">
                             Sign in to Clover
                         </h1>
                     </header>
@@ -24,22 +24,20 @@ export default function SignInPage() {
                     {/* EMAIL & PASSWORD */}
                     <div className="space-y-4">
                         <Clerk.Field name="identifier" className="space-y-1">
-                            <Clerk.Label className="font-bold text-black uppercase">Email</Clerk.Label>
+                            <Clerk.Label className="font-bold text-yellow-400 uppercase">Email</Clerk.Label>
                             <Clerk.Input
                                 type="email"
                                 required
-                                className="w-full px-3 py-2 bg-white border-2 border-black shadow-[3px_3px_0_0_#000] outline-none focus:border-yellow-500"
-                            />
+className="w-full px-3 py-2 bg-zinc-900 border-2 border-black shadow-[3px_3px_0_0_#000] outline-none focus:border-yellow-400 text-white"                            />
                             <Clerk.FieldError className="text-sm text-red-500" />
                         </Clerk.Field>
 
                         <Clerk.Field name="password" className="space-y-1">
-                            <Clerk.Label className="font-bold text-black uppercase">Password</Clerk.Label>
+                            <Clerk.Label className="font-bold text-yellow-400 uppercase">Password</Clerk.Label>
                             <Clerk.Input
                                 type="password"
                                 required
-                                className="w-full px-3 py-2 bg-white border-2 border-black shadow-[3px_3px_0_0_#000] outline-none focus:border-yellow-500"
-                            />
+className="w-full px-3 py-2 bg-zinc-900 border-2 border-black shadow-[3px_3px_0_0_#000] outline-none focus:border-yellow-400 text-white"                            />
                             <Clerk.FieldError className="text-sm text-red-500" />
                         </Clerk.Field>
                     </div>
@@ -52,7 +50,7 @@ export default function SignInPage() {
                         Sign In
                     </SignIn.Action>
 
-                    <p className="text-center text-xs text-black">
+                    <p className="text-center text-xs text-yellow-400">
                         No account?{' '}
                         <Clerk.Link
                             navigate="sign-up"
