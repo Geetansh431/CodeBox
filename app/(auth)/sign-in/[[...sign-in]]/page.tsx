@@ -21,14 +21,6 @@ export default function SignInPage() {
 
                     <Clerk.GlobalError className="block text-sm text-red-500" />
 
-                    {/* GOOGLE LOGIN */}
-                    <Clerk.Connection
-                        name="google"
-                        className="flex w-full items-center justify-center gap-3 px-4 py-2 bg-yellow-400 border-2 border-black shadow-[4px_4px_0_0_#000] active:translate-y-[2px] active:shadow-none font-bold"
-                    >
-                        <span className="text-black">Login with Google</span>
-                    </Clerk.Connection>
-
                     {/* EMAIL & PASSWORD */}
                     <div className="space-y-4">
                         <Clerk.Field name="identifier" className="space-y-1">
