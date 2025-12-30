@@ -72,7 +72,6 @@ export function Header() {
 
   // const { user } = useUser();
   const { user } = useUser();
-  console.log(user);
 
   return (
     <div className='p-4 max-w-7xl flex justify-between items-center w-full'>
