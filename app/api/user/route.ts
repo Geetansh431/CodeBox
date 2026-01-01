@@ -14,7 +14,7 @@ export async function POST(req:NextRequest) {
     if(users?.length <= 0) {
         
         const newUser =  {
-            name: user?.fullName ?? "",
+            name: user?.fullName ?? user?.username ?? "No Name",
             email: user?.primaryEmailAddress?.emailAddress ?? "",
             points: 0
         }
