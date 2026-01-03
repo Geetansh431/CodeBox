@@ -1,5 +1,6 @@
-import Image from 'next/image'
 import React from 'react'
+import Image from 'next/image'
+import { CourseList } from './_components/CourseList'
 
 function Courses() {
   return (
@@ -10,6 +11,11 @@ function Courses() {
                 <h2 className='font-game text-6xl'>Explore All Courses</h2>
                 <p className='text-2xl font-game'>Explore all courses and enroll to learn and increase your skill</p>
             </div>
+        </div>
+
+        <div className='mt-8 pt-24 px-10 md:px-24 lg:px-36'>
+            <h2 className='font-game text-4xl'>All Courses</h2>
+            <CourseList/>
         </div>
     </div>
   )
