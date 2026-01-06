@@ -5,6 +5,22 @@ import Image from 'next/image';
 import { ChartNoAxesColumnDecreasingIcon } from 'lucide-react';
 import Link from 'next/link';
 
+type exercise = {
+    name: string,
+    slug: string,
+    xp: number,
+    difficulty?: string,
+}
+
+type Chapter = {
+    chapterId: number,
+    courseId: number,
+    desc: string,
+    name: string,
+    id: number
+    exercises: exercise[]
+}
+
 export type Course = {
     id: number,
     courseId: number,
@@ -13,6 +29,7 @@ export type Course = {
     level:string,
     bannerImage: string,
     tag: string
+    chapters?: Chapter[]
 }
 
 export function CourseList() {
