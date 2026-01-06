@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import Image from 'next/image';
 import { ChartNoAxesColumnDecreasingIcon } from 'lucide-react';
+import Link from 'next/link';
 
-type CourseList = {
+export type Course = {
     id: number,
     courseId: number,
     title: string,
@@ -16,7 +17,7 @@ type CourseList = {
 
 export function CourseList() {
 
-    const [CourseList, setCoursesList] = useState<CourseList[]>([]);
+    const [CourseList, setCoursesList] = useState<Course[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -32,8 +33,10 @@ export function CourseList() {
 
     return (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5 mt-3 mb-6'>
+           
             {CourseList?.map((course,index)=>(
-                <div key={index} className='border-4 rounded-xl hover:bg-zinc-900 cursor-pointer'>
+                <Link href={`/courses/${course?.courseId}`} key={index}>
+                <div  className='border-4 rounded-xl hover:bg-zinc-900 cursor-pointer'>
                     <Image src={course?.bannerImage} width={400} height={400} alt={course?.title} className='w-full h-[200px] object-cover rounded-t-lg'/>
                     <div className='p-4'>
                         <h2 className='font-game text-2xl'>{course?.title}</h2>
@@ -45,6 +48,7 @@ export function CourseList() {
                         </h2>
                     </div>
                 </div>
+                 </Link>
             ))}
         </div>
     )
