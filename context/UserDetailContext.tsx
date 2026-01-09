@@ -1,6 +1,6 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 export const UserDetailContext = createContext<any>({
-    userDetail: undefined,
-    setUserDetail: () => {}
+  userDetail: undefined,
+  setUserDetail: () => {},
 });

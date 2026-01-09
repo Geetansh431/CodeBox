@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useParams } from 'next/navigation';
 import { CourseDetailBanner } from './_components/CourseDetailBanner';
 import axios from 'axios';
@@ -10,37 +10,36 @@ import { UpgradeToPro } from '../../dashboard/_components/UpgradeToPro';
 import { CommunityHelpSection } from './_components/CommunityHelpSection';
 
 function CourseDetail() {
+  const { courseId } = useParams();
+  const [courseDetail, setCourseDetail] = useState<Course>();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    GetCourseDetail();
+  }, [courseId]);
 
-    const {courseId} = useParams(); 
-    const [courseDetail,setCourseDetail] = useState<Course>();
-    const [loading,setLoading] = useState(false);
-    useEffect(() => {
-        GetCourseDetail();
-    }, [courseId]);
+  const GetCourseDetail = async () => {
+    setLoading(true);
+    const result = await axios.get(`/api/course?courseId=${courseId}`);
+    console.log(result.data);
+    setCourseDetail(result?.data);
+    setLoading(false);
+  };
 
-    const GetCourseDetail = async () => {
-        setLoading(true);
-        const result = await axios.get(`/api/course?courseId=${courseId}`)
-        console.log(result.data)
-        setCourseDetail(result?.data);
-        setLoading(false);
-    }
-
-    return (
-        <div>
-            <CourseDetailBanner loading={loading} courseDetail={courseDetail}/>
-            <div className="grid grid-cols-3 p-10 md:px-24 lg:px-36 gap-7">
-                <div className="col-span-2">
-                     <CourseChapters loading={loading} courseDetail={courseDetail}/>
-                </div>
-                <div>
-                    <CourseStatus/>
-                    <UpgradeToPro/>
-                    <CommunityHelpSection/>
-                </div>
-            </div>  
+  return (
+    <div>
+      <CourseDetailBanner loading={loading} courseDetail={courseDetail} />
+      <div className="grid grid-cols-3 p-10 md:px-24 lg:px-36 gap-7">
+        <div className="col-span-2">
+          <CourseChapters loading={loading} courseDetail={courseDetail} />
         </div>
-    )
+        <div>
+          <CourseStatus courseDetail={courseDetail} />
+          <UpgradeToPro />
+          <CommunityHelpSection />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default CourseDetail;

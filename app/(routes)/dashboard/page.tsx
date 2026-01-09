@@ -1,5 +1,5 @@
-import React from 'react'
-import { WelcomeBanner } from './_components/WelcomeBanner'
+import React from 'react';
+import { WelcomeBanner } from './_components/WelcomeBanner';
 import { EnrolledCourses } from './_components/EnrolledCourses';
 import { ExploreMore } from './_components/ExploreMore';
 import { InviteFriend } from './_components/InviteFriend';
@@ -8,21 +8,21 @@ import { UpgradeToPro } from './_components/UpgradeToPro';
 
 export function Dashboard() {
   return (
-    <div className='p-10 md:px-20 lg:px-36 xl:px-48'>
-      <div className='grid grid-cols-3 gap-7'>
-        <div className='col-span-2'>
-          <WelcomeBanner/>
-          <EnrolledCourses/>
-          <ExploreMore/>
-          <InviteFriend/>
+    <div className="p-10 md:px-20 lg:px-36 xl:px-48">
+      <div className="grid grid-cols-3 gap-7">
+        <div className="col-span-2">
+          <WelcomeBanner />
+          <EnrolledCourses />
+          <ExploreMore />
+          <InviteFriend />
         </div>
         <div>
-          <UserStatus/>
-          <UpgradeToPro/>
+          <UserStatus />
+          <UpgradeToPro />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Dashboard;
