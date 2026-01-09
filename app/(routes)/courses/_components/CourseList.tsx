@@ -30,6 +30,7 @@ export type Course = {
   bannerImage: string;
   tag: string;
   chapters?: Chapter[];
+  userEnrolled?: boolean;
 };
 
 export function CourseList() {

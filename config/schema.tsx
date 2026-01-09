@@ -6,7 +6,7 @@ import {
   timestamp,
 } from 'drizzle-orm/pg-core';
 
-export const umsersTable = pgTable('users', {
+export const usersTable = pgTable('users', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
@@ -36,7 +36,7 @@ export const CourseChaptersTable = pgTable('courseChapters', {
 export const EnrolledCourseTable = pgTable('enrollCourse', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   courseId: integer(),
-  userId: integer(),
+  userId: varchar(),
   enrolledDate: timestamp().defaultNow(),
   xpEarned: integer(),
 });
