@@ -19,13 +19,17 @@ export function CourseStatus({ courseDetail }: Props) {
 
   const GetCounts = () => {
     let totalExcercises = 0;
+    let totalXp = 0;
     courseDetail?.chapters?.forEach((chapter) => {
       totalExcercises = totalExcercises + chapter?.exercises?.length;
+      chapter?.exercises?.forEach((exc) => {
+        totalXp = totalXp + exc?.xp;
+      });
     });
 
     setCounts({
       totalExce: totalExcercises,
-      totalXp: 0,
+      totalXp: totalXp,
     });
   };
 
@@ -48,7 +52,7 @@ export function CourseStatus({ courseDetail }: Props) {
         <Image src="/star.png" alt="book" width={40} height={50} />
         <div className="w-full">
           <h2 className="flex justify-between text-2xl">
-            XP Earned <span className="text-gray-400">1/340</span>
+            XP Earned <span className="text-gray-400">1/{counts?.totalXp}</span>
           </h2>
           <Progress value={37} className="mt-2" />
         </div>

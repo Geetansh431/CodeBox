@@ -8,16 +8,16 @@ export async function GET(req: NextRequest) {
   const courseId = searchParams.get('courseId');
 
   if (courseId) {
-    //@ts-ignore
     const result = await db
       .select()
       .from(CoursesTable)
+      //@ts-ignore
       .where(eq(CoursesTable.courseId, courseId));
 
-    //@ts-ignore
     const chapterResult = await db
       .select()
       .from(CourseChaptersTable)
+      //@ts-ignore
       .where(eq(CourseChaptersTable.courseId, courseId));
 
     return NextResponse.json({

@@ -7,10 +7,10 @@ import { eq } from 'drizzle-orm';
 export async function POST(req: NextRequest) {
   const user = await currentUser();
 
-  //@ts-ignore
   const users = await db
     .select()
     .from(usersTable)
+    //@ts-ignore
     .where(eq(usersTable.email, user?.primaryEmailAddress?.emailAddress));
 
   if (users?.length <= 0) {
