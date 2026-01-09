@@ -6,7 +6,6 @@ import {
   EnrolledCourseTable,
 } from '@/config/schema';
 import { and, asc, eq } from 'drizzle-orm';
-import { EnrolledCourses } from '@/app/(routes)/dashboard/_components/EnrolledCourses';
 import { currentUser } from '@clerk/nextjs/server';
 
 export async function GET(req: NextRequest) {
