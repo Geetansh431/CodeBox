@@ -46,6 +46,7 @@ export async function GET(req: NextRequest) {
       ...result[0],
       chapters: chapterResult,
       userEnrolled: isEnrolledCourse,
+      courseEnrolledInfo: enrolledCourse[0],
     });
   } else {
     const result = await db
