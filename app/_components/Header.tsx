@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import Link from 'next/link';
 import { UserButton, useUser } from '@clerk/nextjs';
+import { useParams, usePathname } from 'next/navigation';
 
 const courses = [
   {
@@ -68,53 +69,60 @@ const courses = [
 ];
 
 export function Header() {
-  // const { user } = useUser();
   const { user } = useUser();
+  const path = usePathname();
+  const { exerciseslug } = useParams();
 
   return (
-    <div className="p-4 max-w-7xl flex justify-between items-center w-full">
+    <div className="p-4 max-w-7xl flex justify-between items-center w-full font-game">
       <div className="flex gap-2 items-center">
         <Image src={'/crown.png'} alt="logo" width={40} height={40} />
         <h2 className="font-bold text-3xl font-game">CodeBox</h2>
       </div>
       {/* Navbar */}
-      <NavigationMenu className="font-game text-xl">
-        <NavigationMenuList className="gap-8">
-          <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-xl">
-              Courses
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid md:grid-cols-2 gap-2 sm:w-[400px] md:w-[500px] lg:w-[600px]">
-                {courses.map((course, index) => (
-                  <div key={index} className="p-2 hover:bg-accent rounded-xl">
-                    <h2 className="font-medium">{course.name}</h2>
-                    <p className="text-sm text-gray-500">{course.desc}</p>
-                  </div>
-                ))}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
+      {!exerciseslug ? (
+        <NavigationMenu className="font-game text-xl">
+          <NavigationMenuList className="gap-8">
+            <NavigationMenuItem>
+              <NavigationMenuTrigger className="text-xl">
+                Courses
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid md:grid-cols-2 gap-2 sm:w-[400px] md:w-[500px] lg:w-[600px]">
+                  {courses.map((course, index) => (
+                    <div key={index} className="p-2 hover:bg-accent rounded-xl">
+                      <h2 className="font-medium">{course.name}</h2>
+                      <p className="text-sm text-gray-500">{course.desc}</p>
+                    </div>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild className="text-xl">
-              <Link href="/projects"> Projects</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild className="text-xl">
+                <Link href="/projects"> Projects</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild className="text-xl">
-              <Link href="/pricing"> Pricing</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild className="text-xl">
+                <Link href="/pricing"> Pricing</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
 
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild className="text-xl">
-              <Link href="/contact-us"> Contact</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild className="text-xl">
+                <Link href="/contact-us"> Contact</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      ) : (
+        <h2 className="text-2xl">
+          {exerciseslug?.toString()?.replaceAll('-', ' ').toLocaleUpperCase()}
+        </h2>
+      )}
 
       {/*Signup */}
 
