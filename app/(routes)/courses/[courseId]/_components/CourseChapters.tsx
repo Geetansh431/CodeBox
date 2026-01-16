@@ -62,7 +62,7 @@ export function CourseChapters({ loading, courseDetail }: Props) {
           <Skeleton className="w-full h-[100px] mt-5 rounded-xl" />
         </div>
       ) : (
-        <div className="p-5 border-4 rounded-2xl">
+        <div className="p-5 border-4 rounded-2xl font-game">
           {courseDetail?.chapters?.map((chapter, index) => (
             <Accordion type="single" collapsible key={index}>
               <AccordionItem value="item-1">
