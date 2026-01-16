@@ -2,6 +2,7 @@
 
 import * as Clerk from '@clerk/elements/common';
 import * as SignIn from '@clerk/elements/sign-in';
+import { Captcha } from '@clerk/elements/sign-in';
 import Image from 'next/image';
 
 export default function SignInPage() {
@@ -47,6 +48,9 @@ export default function SignInPage() {
               <Clerk.FieldError className="text-sm text-red-500" />
             </Clerk.Field>
           </div>
+
+          {/* CAPTCHA */}
+          <Captcha className="flex justify-center" />
 
           {/* SUBMIT BUTTON */}
           <SignIn.Action
