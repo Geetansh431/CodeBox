@@ -99,6 +99,8 @@ export function CourseChapters({ loading, courseDetail }: Props) {
                               '/courses/' +
                               courseDetail?.courseId +
                               '/' +
+                              chapter?.chapterId +
+                              '/' +
                               exc?.slug
                             }
                           >
