@@ -5,12 +5,40 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SplitterLayout from 'react-splitter-layout';
 import 'react-splitter-layout/lib/index.css';
+import { exercise } from '../../../_components/CourseList';
+
+type ExercisesContent = {
+  content: string;
+  hint: string;
+  hintXp: string;
+  starterCode: any;
+  task: string;
+};
+
+type ExerciseData = {
+  chapterId: number;
+  courseId: number;
+  exerciseId: number;
+  exerciseName: string;
+  exerciseContent: ExercisesContent;
+};
+
+type courseExercise = {
+  chapterId: number;
+  courseId: number;
+  desc: string;
+  name: string;
+  exercises: exercise[];
+  exerciseData: ExerciseData[];
+};
 
 function Playground() {
   // course information
   const { courseId, chapterId, exerciseslug } = useParams();
   const [loading, setLoading] = useState(false);
 
+  const [courseExerciseData, setCourseExerciseData] =
+    useState<courseExercise>();
   useEffect(() => {
     GetExerciseCourseDetail();
   }, []);
@@ -22,6 +50,7 @@ function Playground() {
       chapterId: chapterId,
       exerciseId: exerciseslug,
     });
+    setCourseExerciseData(result.data);
     setLoading(true);
   };
 
