@@ -1,10 +1,10 @@
 'use client';
-import { useUser } from '@clerk/nextjs';
 import Image from 'next/image';
 import React from 'react';
+import { useAuth } from '@/context/AuthContext';
 
 export function UserStatus() {
-  const { user } = useUser();
+  const { user } = useAuth();
 
   return (
     <div className="p-4 border-4 rounded-2xl">
@@ -15,15 +15,13 @@ export function UserStatus() {
           width={70}
           height={70}
         />
-        <h2 className="font-game text-xl">
-          {user?.primaryEmailAddress?.emailAddress}
-        </h2>
+        <h2 className="font-game text-xl">{user?.email}</h2>
       </div>
       <div className="grid grid-cols-2 gap-5">
         <div className="flex gap-3 items-center">
           <Image src={'/star.png'} alt="star" width={35} height={35} />
           <div>
-            <h2 className="text-3xl font-game">20</h2>
+            <h2 className="text-3xl font-game">{user?.points || 0}</h2>
             <h2 className="font-game text-gray-500 text-xl">Total Rewards</h2>
           </div>
         </div>

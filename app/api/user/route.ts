@@ -1,28 +1,55 @@
 import { db } from '@/config/db';
 import { usersTable } from '@/config/schema';
-import { currentUser } from '@clerk/nextjs/server';
-import { NextRequest, NextResponse } from 'next/server';
+import { getCurrentUser } from '@/lib/auth';
+import { NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
 
-export async function POST(req: NextRequest) {
-  const user = await currentUser();
+export async function GET() {
+  const session = await getCurrentUser();
+
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
   const users = await db
-    .select()
+    .select({
+      id: usersTable.id,
+      name: usersTable.name,
+      email: usersTable.email,
+      points: usersTable.points,
+      subscription: usersTable.subscription,
+    })
     .from(usersTable)
-    //@ts-ignore
-    .where(eq(usersTable.email, user?.primaryEmailAddress?.emailAddress));
+    .where(eq(usersTable.id, session.userId));
 
   if (users?.length <= 0) {
-    const newUser = {
-      name: user?.fullName ?? user?.username ?? 'No Name',
-      email: user?.primaryEmailAddress?.emailAddress ?? '',
-      points: 0,
-    };
+    return NextResponse.json({ error: 'User not found' }, { status: 404 });
+  }
 
-    const result = await db.insert(usersTable).values(newUser).returning();
+  return NextResponse.json(users[0]);
+}
 
-    return NextResponse.json(result[0]);
+// Keep POST for backwards compatibility but it now just returns existing user
+export async function POST() {
+  const session = await getCurrentUser();
+
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const users = await db
+    .select({
+      id: usersTable.id,
+      name: usersTable.name,
+      email: usersTable.email,
+      points: usersTable.points,
+      subscription: usersTable.subscription,
+    })
+    .from(usersTable)
+    .where(eq(usersTable.id, session.userId));
+
+  if (users?.length <= 0) {
+    return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
   return NextResponse.json(users[0]);

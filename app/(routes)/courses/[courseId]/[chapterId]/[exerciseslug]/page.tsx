@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import SplitterLayout from 'react-splitter-layout';
 import 'react-splitter-layout/lib/index.css';
 import { exercise } from '../../../_components/CourseList';
+import { ContentSection } from './_components/ContentSection';
 
 type ExercisesContent = {
   content: string;
@@ -23,13 +24,13 @@ type ExerciseData = {
   exerciseContent: ExercisesContent;
 };
 
-type courseExercise = {
+export type courseExercise = {
   chapterId: number;
   courseId: number;
   desc: string;
   name: string;
   exercises: exercise[];
-  exerciseData: ExerciseData[];
+  exerciseData: ExerciseData;
 };
 
 function Playground() {
@@ -39,6 +40,7 @@ function Playground() {
 
   const [courseExerciseData, setCourseExerciseData] =
     useState<courseExercise>();
+
   useEffect(() => {
     GetExerciseCourseDetail();
   }, []);
@@ -51,13 +53,18 @@ function Playground() {
       exerciseId: exerciseslug,
     });
     setCourseExerciseData(result.data);
-    setLoading(true);
+    setLoading(false);
   };
 
   return (
     <div className="border-t-4">
       <SplitterLayout percentage primaryMinSize={40} secondaryInitialSize={60}>
-        <div>Content</div>
+        <div>
+          <ContentSection
+            courseExerciseData={courseExerciseData}
+            loading={loading}
+          />
+        </div>
         <div>Code Editor</div>
       </SplitterLayout>
     </div>

@@ -10,8 +10,10 @@ export const usersTable = pgTable('users', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
+  password: varchar({ length: 255 }).default(''),
   points: integer().default(0),
   subscription: varchar(),
+  createdAt: timestamp().defaultNow(),
 });
 
 export const CoursesTable = pgTable('courses', {

@@ -1,14 +1,7 @@
 import type { Metadata } from 'next';
-import {
-  Geist,
-  Geist_Mono,
-  Pixelify_Sans,
-  Inter,
-  Jersey_10,
-} from 'next/font/google';
+import { Geist, Geist_Mono, Inter, Jersey_10 } from 'next/font/google';
 import './globals.css';
 import { Provider } from '../app/provider';
-import { ClerkProvider } from '@clerk/nextjs';
 import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
@@ -43,22 +36,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning className="dark">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} ${GameFont.variable} ${inter.variable} antialiased`}
+    <html lang="en" suppressHydrationWarning className="dark">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${GameFont.variable} ${inter.variable} antialiased`}
+      >
+        <Provider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
         >
-          <Provider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Toaster />
-          </Provider>
-        </body>
-      </html>
-    </ClerkProvider>
+          {children}
+          <Toaster />
+        </Provider>
+      </body>
+    </html>
   );
 }

@@ -1,17 +1,22 @@
 import { db } from '@/config/db';
 import { EnrolledCourseTable } from '@/config/schema';
-import { currentUser } from '@clerk/nextjs/server';
+import { getCurrentUser } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
+  const session = await getCurrentUser();
+
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { courseId } = await req.json();
-  const user = await currentUser();
 
   const result = await db
     .insert(EnrolledCourseTable)
     .values({
       courseId: courseId,
-      userId: user?.primaryEmailAddress?.emailAddress,
+      userId: session.email,
       xpEarned: 0,
     })
     .returning();
