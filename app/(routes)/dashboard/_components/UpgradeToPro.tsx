@@ -1,9 +1,25 @@
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-export function UpgradeToPro() {
+type Props = {
+  loading?: boolean;
+};
+
+export function UpgradeToPro({ loading }: Props = {}) {
+  if (loading) {
+    return (
+      <div className="flex items-center flex-col p-5 border-4 rounded-2xl mt-8">
+        <Skeleton className="h-16 w-16 rounded-full" />
+        <Skeleton className="h-8 w-32 mt-4" />
+        <Skeleton className="h-6 w-48 mt-3" />
+        <Skeleton className="h-12 w-32 mt-4" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center flex-col p-5 border-4 rounded-2xl mt-8">
       <Image src={'/logo.png'} alt="logo" width={70} height={70} />

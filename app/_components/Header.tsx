@@ -42,40 +42,33 @@ export function Header() {
         <h2 className="font-bold text-3xl font-game">CodeBox</h2>
       </div>
       {/* Navbar */}
-      {!exerciseslug ? (
-        <NavigationMenu className="font-game text-xl">
-          <NavigationMenuList className="gap-8">
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild className="text-xl">
-                <Link href="/courses"> Courses</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
+      <NavigationMenu className="font-game text-xl">
+        <NavigationMenuList className="gap-8">
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild className="text-xl">
+              <Link href="/courses"> Courses</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
 
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild className="text-xl">
-                <Link href="/projects"> Projects</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild className="text-xl">
+              <Link href="/projects"> Projects</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
 
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild className="text-xl">
-                <Link href="/pricing"> Pricing</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild className="text-xl">
+              <Link href="/pricing"> Pricing</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
 
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild className="text-xl">
-                <Link href="/contact-us"> Contact</Link>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      ) : (
-        <h2 className="text-2xl">
-          {exerciseslug?.toString()?.replaceAll('-', ' ').toLocaleUpperCase()}
-        </h2>
-      )}
-
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild className="text-xl">
+              <Link href="/contact-us"> Contact</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
       {/* Auth Buttons */}
       {isLoading ? (
         <div className="w-[120px] h-[44px]" />

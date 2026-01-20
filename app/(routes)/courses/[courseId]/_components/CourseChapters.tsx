@@ -54,6 +54,18 @@ export function CourseChapters({ loading, courseDetail }: Props) {
     return completedChapter ? true : false;
   };
 
+  if (loading) {
+    return (
+      <div className="p-5 border-4 rounded-2xl font-game">
+        <Skeleton className="w-full h-[80px] rounded-xl mb-4" />
+        <Skeleton className="w-full h-[80px] rounded-xl mb-4" />
+        <Skeleton className="w-full h-[80px] rounded-xl mb-4" />
+        <Skeleton className="w-full h-[80px] rounded-xl mb-4" />
+        <Skeleton className="w-full h-[80px] rounded-xl" />
+      </div>
+    );
+  }
+
   return (
     <div>
       {courseDetail?.chapters?.length === 0 ? (

@@ -1,13 +1,15 @@
 import { Progress } from '@/components/ui/progress';
+import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Course } from '../../_components/CourseList';
 
 type Props = {
   courseDetail: Course | undefined;
+  loading?: boolean;
 };
 
-export function CourseStatus({ courseDetail }: Props) {
+export function CourseStatus({ courseDetail, loading }: Props) {
   const [counts, setCounts] = useState<{
     totalExce: number;
     totalXp: number;
@@ -40,6 +42,30 @@ export function CourseStatus({ courseDetail }: Props) {
     }
     return;
   };
+
+  if (loading) {
+    return (
+      <div className="font-game p-4 border-4 rounded-2xl w-full">
+        <Skeleton className="h-8 w-32 mb-4" />
+
+        <div className="flex items-center gap-5 mt-4">
+          <Skeleton className="h-12 w-12 rounded" />
+          <div className="w-full">
+            <Skeleton className="h-6 w-full mb-2" />
+            <Skeleton className="h-4 w-full" />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-5 mt-4">
+          <Skeleton className="h-12 w-12 rounded" />
+          <div className="w-full">
+            <Skeleton className="h-6 w-full mb-2" />
+            <Skeleton className="h-4 w-full" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="font-game p-4 border-4 rounded-2xl w-full">

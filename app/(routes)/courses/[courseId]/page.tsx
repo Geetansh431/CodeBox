@@ -37,9 +37,9 @@ function CourseDetail() {
           <CourseChapters loading={loading} courseDetail={courseDetail} />
         </div>
         <div>
-          <CourseStatus courseDetail={courseDetail} />
-          <UpgradeToPro />
-          <CommunityHelpSection />
+          <CourseStatus courseDetail={courseDetail} loading={loading} />
+          <UpgradeToPro loading={loading} />
+          <CommunityHelpSection loading={loading} />
         </div>
       </div>
     </div>
