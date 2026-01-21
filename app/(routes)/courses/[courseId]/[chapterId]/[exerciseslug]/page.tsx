@@ -7,6 +7,7 @@ import SplitterLayout from 'react-splitter-layout';
 import 'react-splitter-layout/lib/index.css';
 import { exercise } from '../../../_components/CourseList';
 import { ContentSection } from './_components/ContentSection';
+import { CodeEditor } from './_components/CodeEditor';
 
 type ExercisesContent = {
   content: string;
@@ -65,7 +66,9 @@ function Playground() {
             loading={loading}
           />
         </div>
-        <div>Code Editor</div>
+        <div>
+          <CodeEditor />
+        </div>
       </SplitterLayout>
     </div>
   );
