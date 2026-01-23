@@ -9,6 +9,9 @@ import dynamic from 'next/dynamic';
 import type { courseExercise } from '../page';
 import { Button } from '@/components/ui/button';
 import { dracula } from '@codesandbox/sandpack-themes';
+import { useParams } from 'next/navigation';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 const SplitterLayout = dynamic(() => import('react-splitter-layout'), {
   ssr: false,
@@ -19,7 +22,7 @@ type Props = {
   loading?: boolean;
 };
 
-const CodeEditorChildren = () => {
+const CodeEditorChildren = ({ onCompletedExercise }: any) => {
   const { sandpack } = useSandpack();
   return (
     <div className="font-game absolute bottom-40 flex gap-5 right-5">
@@ -31,13 +34,37 @@ const CodeEditorChildren = () => {
       >
         Run Code
       </Button>
-      <Button variant={'pixel'} className="bg-[#a3e534] text-xl" size={'lg'}>
+      <Button
+        variant={'pixel'}
+        className="bg-[#a3e534] text-xl"
+        size={'lg'}
+        onClick={() => onCompletedExercise()}
+      >
         Mark Completed!
       </Button>
     </div>
   );
 };
+
 export function CodeEditor({ courseExerciseData, loading }: Props) {
+  const { exerciseslug } = useParams();
+
+  const onCompletedExercise = async () => {
+    const exerciseIndex = courseExerciseData?.exercises?.findIndex(
+      (item) => item.slug === exerciseslug
+    );
+
+    if (exerciseIndex === undefined) return;
+
+    const result = await axios.post('/api/exercise/complete', {
+      courseId: courseExerciseData?.courseId,
+      chapterId: courseExerciseData?.chapterId,
+      exerciseId: exerciseIndex + 1,
+      xpEarned: courseExerciseData?.exercises[exerciseIndex].xp,
+    });
+    toast.success('Exercise marked as completed!');
+  };
+
   return (
     <div>
       <SandpackProvider
@@ -59,7 +86,7 @@ export function CodeEditor({ courseExerciseData, loading }: Props) {
           >
             <div className="relative h-full">
               <SandpackCodeEditor style={{ height: '100%' }} showTabs />
-              <CodeEditorChildren />
+              <CodeEditorChildren onCompletedExercise={onCompletedExercise} />
             </div>
             <SandpackPreview
               style={{ height: '100%' }}

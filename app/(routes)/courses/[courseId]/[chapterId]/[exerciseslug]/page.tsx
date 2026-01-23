@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 const SplitterLayout = dynamic(() => import('react-splitter-layout'), {
   ssr: false,
@@ -47,7 +48,7 @@ function Playground() {
 
   const [courseExerciseData, setCourseExerciseData] =
     useState<courseExercise>();
-
+  const [exerciseInfo, setExerciseInfo] = useState<exercise>();
   useEffect(() => {
     GetExerciseCourseDetail();
   }, []);
@@ -70,6 +71,17 @@ function Playground() {
     };
   }, []);
 
+  useEffect(() => {
+    courseExerciseData && GetExerciseDetail();
+  }, [courseExerciseData]);
+
+  const GetExerciseDetail = () => {
+    const exerciseInfo = courseExerciseData?.exercises?.find(
+      (item) => item.slug === exerciseslug
+    );
+    setExerciseInfo(exerciseInfo);
+  };
+
   return (
     <div className="border-t-4">
       <SplitterLayout percentage primaryMinSize={40} secondaryInitialSize={60}>
@@ -90,6 +102,14 @@ function Playground() {
         <Button variant={'pixel'} className="text-xl">
           Previous
         </Button>
+        <div className="flex gap-2 items-center">
+          <Image src="/star.png" alt="star" height={40} width={40} />
+          <h2 className="font-game text-2xl">
+            You can earn{' '}
+            <span className="text-green-400 text-3xl">{exerciseInfo?.xp}</span>{' '}
+            Xp
+          </h2>
+        </div>
         <Button variant={'pixel'} className="text-xl">
           Next
         </Button>
