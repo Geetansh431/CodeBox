@@ -1,13 +1,19 @@
 'use client';
 import axios from 'axios';
+import dynamic from 'next/dynamic';
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import SplitterLayout from 'react-splitter-layout';
+
+const SplitterLayout = dynamic(() => import('react-splitter-layout'), {
+  ssr: false,
+});
+
 import 'react-splitter-layout/lib/index.css';
 import { exercise } from '../../../_components/CourseList';
 import { ContentSection } from './_components/ContentSection';
 import { CodeEditor } from './_components/CodeEditor';
+import { Button } from '@/components/ui/button';
 
 type ExercisesContent = {
   content: string;
@@ -57,6 +63,13 @@ function Playground() {
     setLoading(false);
   };
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   return (
     <div className="border-t-4">
       <SplitterLayout percentage primaryMinSize={40} secondaryInitialSize={60}>
@@ -67,9 +80,20 @@ function Playground() {
           />
         </div>
         <div>
-          <CodeEditor />
+          <CodeEditor
+            courseExerciseData={courseExerciseData}
+            loading={loading}
+          />
         </div>
       </SplitterLayout>
+      <div className="font-game fixed bottom-0 w-full bg-zinc-900 flex p-4 justify-between items-center">
+        <Button variant={'pixel'} className="text-xl">
+          Previous
+        </Button>
+        <Button variant={'pixel'} className="text-xl">
+          Next
+        </Button>
+      </div>
     </div>
   );
 }

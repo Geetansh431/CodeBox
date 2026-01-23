@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import type { courseExercise } from '../page';
-import { Lightbulb } from 'lucide-react';
+import { Lightbulb, Target, Book } from 'lucide-react';
 
 type Props = {
   courseExerciseData: courseExercise | undefined;
@@ -47,9 +47,10 @@ export function ContentSection({ courseExerciseData, loading }: Props) {
   }
 
   return (
-    <div className="p-10 -mt-8">
+    <div className="p-10 -mt-8 mb-32">
       <div className="font-game">
-        <h2 className="text-3xl my-3">
+        <h2 className="text-3xl my-3 flex items-center gap-2 text-green-400">
+          <Book />
           {courseExerciseData?.exerciseData?.exerciseName}
         </h2>
         <div
@@ -58,7 +59,10 @@ export function ContentSection({ courseExerciseData, loading }: Props) {
           }}
         />
         <div>
-          <h2 className="text-3xl mt-4">Task</h2>
+          <h2 className="text-3xl mt-4 flex gap-2 items-center text-blue-400">
+            <Target />
+            Task
+          </h2>
           <div
             className="p-4 border rounded-2xl bg-zinc-800 mt-2"
             dangerouslySetInnerHTML={{
