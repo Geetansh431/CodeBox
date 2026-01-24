@@ -11,7 +11,7 @@ const SplitterLayout = dynamic(() => import('react-splitter-layout'), {
 });
 
 import 'react-splitter-layout/lib/index.css';
-import { exercise } from '../../../_components/CourseList';
+import { CompletedExercises, exercise } from '../../../_components/CourseList';
 import { ContentSection } from './_components/ContentSection';
 import { CodeEditor } from './_components/CodeEditor';
 import { Button } from '@/components/ui/button';
@@ -39,6 +39,7 @@ export type courseExercise = {
   name: string;
   exercises: exercise[];
   exerciseData: ExerciseData;
+  completedExercises: CompletedExercises[];
 };
 
 function Playground() {

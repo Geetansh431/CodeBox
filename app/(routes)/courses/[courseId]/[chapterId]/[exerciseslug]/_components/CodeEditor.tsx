@@ -22,7 +22,7 @@ type Props = {
   loading?: boolean;
 };
 
-const CodeEditorChildren = ({ onCompletedExercise }: any) => {
+const CodeEditorChildren = ({ onCompletedExercise, IsCompleted }: any) => {
   const { sandpack } = useSandpack();
   return (
     <div className="font-game absolute bottom-40 flex gap-5 right-5">
@@ -40,7 +40,7 @@ const CodeEditorChildren = ({ onCompletedExercise }: any) => {
         size={'lg'}
         onClick={() => onCompletedExercise()}
       >
-        Mark Completed!
+        {IsCompleted ? 'Completed!' : 'Mark Completed!'}
       </Button>
     </div>
   );
@@ -49,11 +49,15 @@ const CodeEditorChildren = ({ onCompletedExercise }: any) => {
 export function CodeEditor({ courseExerciseData, loading }: Props) {
   const { exerciseslug } = useParams();
 
-  const onCompletedExercise = async () => {
-    const exerciseIndex = courseExerciseData?.exercises?.findIndex(
-      (item) => item.slug === exerciseslug
-    );
+  const exerciseIndex = courseExerciseData?.exercises?.findIndex(
+    (item) => item.slug === exerciseslug
+  );
 
+  const IsCompleted = courseExerciseData?.completedExercises?.find(
+    (item) => item?.exerciseId === Number(exerciseIndex) + 1
+  );
+  console.log('IsCompleted', IsCompleted);
+  const onCompletedExercise = async () => {
     if (exerciseIndex === undefined) return;
 
     const result = await axios.post('/api/exercise/complete', {
@@ -86,7 +90,10 @@ export function CodeEditor({ courseExerciseData, loading }: Props) {
           >
             <div className="relative h-full">
               <SandpackCodeEditor style={{ height: '100%' }} showTabs />
-              <CodeEditorChildren onCompletedExercise={onCompletedExercise} />
+              <CodeEditorChildren
+                onCompletedExercise={onCompletedExercise}
+                IsCompleted={IsCompleted}
+              />
             </div>
             <SandpackPreview
               style={{ height: '100%' }}
