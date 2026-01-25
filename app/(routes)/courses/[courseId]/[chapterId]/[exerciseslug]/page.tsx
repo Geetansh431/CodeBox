@@ -15,6 +15,7 @@ import { CompletedExercises, exercise } from '../../../_components/CourseList';
 import { ContentSection } from './_components/ContentSection';
 import { CodeEditor } from './_components/CodeEditor';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 type ExercisesContent = {
   content: string;
@@ -24,7 +25,7 @@ type ExercisesContent = {
   task: string;
 };
 
-type ExerciseData = {
+export type ExerciseData = {
   chapterId: number;
   courseId: number;
   exerciseId: number;
@@ -50,6 +51,7 @@ function Playground() {
   const [courseExerciseData, setCourseExerciseData] =
     useState<courseExercise>();
   const [exerciseInfo, setExerciseInfo] = useState<exercise>();
+
   useEffect(() => {
     GetExerciseCourseDetail();
   }, []);
@@ -83,12 +85,26 @@ function Playground() {
     setExerciseInfo(exerciseInfo);
   };
 
+  const currentIndex =
+    courseExerciseData?.exercises?.findIndex(
+      (item) => item.slug === exerciseslug
+    ) ?? -1;
+
+  const previousRoute =
+    currentIndex > 0 && courseExerciseData?.exercises?.[currentIndex - 1]?.slug
+      ? `/courses/${courseId}/${chapterId}/${courseExerciseData.exercises[currentIndex - 1].slug}`
+      : '/courses/' + courseId;
+
+  const nextRoute = courseExerciseData?.exercises?.[currentIndex + 1]?.slug
+    ? `/courses/${courseId}/${chapterId}/${courseExerciseData.exercises[currentIndex + 1].slug}`
+    : '';
+
   return (
     <div className="border-t-4">
       <SplitterLayout percentage primaryMinSize={40} secondaryInitialSize={60}>
         <div>
           <ContentSection
-            courseExerciseData={courseExerciseData}
+            exerciseData={courseExerciseData?.exerciseData}
             loading={loading}
           />
         </div>
@@ -100,9 +116,11 @@ function Playground() {
         </div>
       </SplitterLayout>
       <div className="font-game fixed bottom-0 w-full bg-zinc-900 flex p-4 justify-between items-center">
-        <Button variant={'pixel'} className="text-xl">
-          Previous
-        </Button>
+        <Link href={previousRoute}>
+          <Button variant={'pixel'} className="text-xl">
+            Previous
+          </Button>
+        </Link>
         <div className="flex gap-2 items-center">
           <Image src="/star.png" alt="star" height={40} width={40} />
           <h2 className="font-game text-2xl">
@@ -111,9 +129,11 @@ function Playground() {
             Xp
           </h2>
         </div>
-        <Button variant={'pixel'} className="text-xl">
-          Next
-        </Button>
+        <Link href={nextRoute}>
+          <Button variant={'pixel'} className="text-xl">
+            Next
+          </Button>
+        </Link>
       </div>
     </div>
   );

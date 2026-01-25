@@ -12,6 +12,7 @@ import { dracula } from '@codesandbox/sandpack-themes';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useState } from 'react';
 
 const SplitterLayout = dynamic(() => import('react-splitter-layout'), {
   ssr: false,
@@ -38,9 +39,10 @@ const CodeEditorChildren = ({ onCompletedExercise, IsCompleted }: any) => {
         variant={'pixel'}
         className="bg-[#a3e534] text-xl"
         size={'lg'}
+        disabled={IsCompleted}
         onClick={() => onCompletedExercise()}
       >
-        {IsCompleted ? 'Completed!' : 'Mark Completed!'}
+        {IsCompleted ? 'Completed !' : 'Mark Completed!'}
       </Button>
     </div>
   );
@@ -48,25 +50,37 @@ const CodeEditorChildren = ({ onCompletedExercise, IsCompleted }: any) => {
 
 export function CodeEditor({ courseExerciseData, loading }: Props) {
   const { exerciseslug } = useParams();
+  const [isLocallyCompleted, setIsLocallyCompleted] = useState(false);
 
   const exerciseIndex = courseExerciseData?.exercises?.findIndex(
     (item) => item.slug === exerciseslug
   );
 
-  const IsCompleted = courseExerciseData?.completedExercises?.find(
+  const IsCompletedFromServer = courseExerciseData?.completedExercises?.find(
     (item) => item?.exerciseId === Number(exerciseIndex) + 1
   );
-  console.log('IsCompleted', IsCompleted);
+
+  const IsCompleted = isLocallyCompleted || !!IsCompletedFromServer;
+
   const onCompletedExercise = async () => {
     if (exerciseIndex === undefined) return;
 
-    const result = await axios.post('/api/exercise/complete', {
-      courseId: courseExerciseData?.courseId,
-      chapterId: courseExerciseData?.chapterId,
-      exerciseId: exerciseIndex + 1,
-      xpEarned: courseExerciseData?.exercises[exerciseIndex].xp,
-    });
-    toast.success('Exercise marked as completed!');
+    // Optimistic update
+    setIsLocallyCompleted(true);
+
+    try {
+      await axios.post('/api/exercise/complete', {
+        courseId: courseExerciseData?.courseId,
+        chapterId: courseExerciseData?.chapterId,
+        exerciseId: exerciseIndex + 1,
+        xpEarned: courseExerciseData?.exercises[exerciseIndex].xp,
+      });
+      toast.success('Exercise marked as completed!');
+    } catch (error) {
+      // Revert on error
+      setIsLocallyCompleted(false);
+      toast.error('Failed to mark exercise as completed');
+    }
   };
 
   return (
