@@ -38,6 +38,7 @@ export type courseExercise = {
   courseId: number;
   desc: string;
   name: string;
+  editorType?: string;
   exercises: exercise[];
   exerciseData: ExerciseData;
   completedExercises: CompletedExercises[];
@@ -63,6 +64,7 @@ function Playground() {
       chapterId: chapterId,
       exerciseId: exerciseslug,
     });
+
     setCourseExerciseData(result.data);
     setLoading(false);
   };

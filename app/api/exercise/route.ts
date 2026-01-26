@@ -2,6 +2,7 @@ import { db } from '@/config/db';
 import {
   CompletedExerciseTable,
   CourseChaptersTable,
+  CoursesTable,
   ExerciseTable,
 } from '@/config/schema';
 import { NextRequest, NextResponse } from 'next/server';
@@ -9,6 +10,11 @@ import { and, eq } from 'drizzle-orm';
 
 export async function POST(req: NextRequest) {
   const { courseId, chapterId, exerciseId } = await req.json();
+
+  const courseInfo = await db
+    .select()
+    .from(CoursesTable)
+    .where(eq(CoursesTable.courseId, courseId));
 
   const courseResult = await db
     .select()
@@ -44,5 +50,6 @@ export async function POST(req: NextRequest) {
     ...courseResult[0],
     exerciseData: exerciseResult[0],
     completedExercises: completedExercise,
+    editorType: courseInfo[0]?.editorType,
   });
 }

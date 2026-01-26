@@ -8,6 +8,7 @@ import {
 import dynamic from 'next/dynamic';
 import type { courseExercise } from '../page';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { dracula } from '@codesandbox/sandpack-themes';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
@@ -21,6 +22,21 @@ const SplitterLayout = dynamic(() => import('react-splitter-layout'), {
 type Props = {
   courseExerciseData: courseExercise | undefined;
   loading?: boolean;
+};
+
+const CodeEditorSkeleton = () => {
+  return (
+    <div className="flex h-196 gap-4 p-4">
+      <div className="flex-1 flex flex-col gap-3">
+        <Skeleton className="h-8 w-32 rounded-lg" />
+        <Skeleton className="flex-1 rounded-lg" />
+      </div>
+      <div className="flex-1 flex flex-col gap-3">
+        <Skeleton className="h-8 w-32 rounded-lg" />
+        <Skeleton className="flex-1 rounded-lg" />
+      </div>
+    </div>
+  );
 };
 
 const CodeEditorChildren = ({ onCompletedExercise, IsCompleted }: any) => {
@@ -83,10 +99,15 @@ export function CodeEditor({ courseExerciseData, loading }: Props) {
     }
   };
 
+  if (loading || !courseExerciseData) {
+    return <CodeEditorSkeleton />;
+  }
+
   return (
     <div>
       <SandpackProvider
-        template="static"
+        // @ts-ignore
+        template={courseExerciseData?.editorType ?? 'react'}
         theme={dracula}
         style={{ height: '100vh' }}
         files={courseExerciseData?.exerciseData?.exerciseContent?.starterCode}
