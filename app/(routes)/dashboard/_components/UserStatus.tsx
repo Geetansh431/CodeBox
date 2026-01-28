@@ -1,11 +1,12 @@
 'use client';
 import Image from 'next/image';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { UserDetailContext } from '@/context/UserDetailContext';
 
 export function UserStatus() {
   const { user } = useAuth();
-
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
   return (
     <div className="p-4 border-4 rounded-2xl">
       <div className="flex gap-3 items-center">

@@ -1,15 +1,12 @@
 'use client';
 
-import React from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
 import {
   DropdownMenu,
@@ -19,15 +16,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { LogOut, User, ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export function Header() {
   const { user, isAuthenticated, isLoading, logout } = useAuth();
-  const path = usePathname();
-  const { exerciseslug } = useParams();
   const navigate = useRouter();
   const handleLogoClick = () => {
     navigate.push('/');
