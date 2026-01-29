@@ -16,7 +16,7 @@ export function CourseProgressCard({ course }: Props) {
           alt={course?.title}
           width={500}
           height={500}
-          className="w-full h-[170px] rounded-t-xl object-cover"
+          className="w-full h-[165px] rounded-t-xl object-cover"
         />
         <div className="font-game p-4">
           <h2 className="text-lg font-light text-gray-500">Course</h2>
