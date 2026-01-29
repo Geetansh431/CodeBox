@@ -112,7 +112,7 @@ export default function PricingPage() {
                 <Button
                   variant={tier.isPopular ? 'pixel' : 'outline'}
                   size="lg"
-                  className={`w-full font-game text-lg mb-8 ${
+                  className={`w-full font-game text-lg mb-8 cursor-pointer ${
                     !tier.isPopular &&
                     'border-2 border-gray-500 text-white hover:bg-gray-700'
                   }`}
