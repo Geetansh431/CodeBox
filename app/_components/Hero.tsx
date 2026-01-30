@@ -29,7 +29,7 @@ export function Hero() {
           Begginer friendly coding courses and projects{' '}
         </h2>
 
-        <Link href={'/sign-in'}>
+        <Link href={'/courses'}>
           <Button className="font-game text-3xl p-6 mt-7" variant={'pixel'}>
             GET STARTED
           </Button>

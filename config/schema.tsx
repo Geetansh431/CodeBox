@@ -60,3 +60,16 @@ export const ExerciseTable = pgTable('exercise', {
   exerciseContent: json(),
   exerciseName: varchar(),
 });
+
+export const PaymentsTable = pgTable('payments', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer().notNull(),
+  orderId: varchar().notNull(),
+  paymentId: varchar(),
+  amount: integer().notNull(),
+  currency: varchar().default('INR'),
+  planType: varchar().notNull(),
+  status: varchar().default('created'),
+  createdAt: timestamp().defaultNow(),
+  updatedAt: timestamp().defaultNow(),
+});

@@ -46,12 +46,6 @@ export function Header() {
 
           <NavigationMenuItem>
             <NavigationMenuLink asChild className="text-xl">
-              <Link href="/projects"> Projects</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild className="text-xl">
               <Link href="/pricing"> Pricing</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>

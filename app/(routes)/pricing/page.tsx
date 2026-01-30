@@ -2,6 +2,10 @@
 
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 interface PricingTier {
   name: string;
@@ -56,6 +60,114 @@ const pricingTiers: PricingTier[] = [
 ];
 
 export default function PricingPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentPlan, setCurrentPlan] = useState<string | null>(null);
+
+  // Check if user is logged in and get subscription
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get('/api/user');
+        if (response.data) {
+          setIsLoggedIn(true);
+          setCurrentPlan(response.data.subscription || 'Starter');
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch {
+        setIsLoggedIn(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  // Handle payment
+  const handlePayment = async (planType: string, amount: number) => {
+    if (!isLoggedIn) {
+      toast.error('Please log in to upgrade your plan');
+      router.push('/sign-in');
+      return;
+    }
+
+    if (amount === 0) {
+      // Free plan - no payment needed
+      toast.success('You selected the free plan!');
+      return;
+    }
+
+    setLoading(planType);
+
+    try {
+      // Step 1: Create order
+      const orderResponse = await axios.post('/api/payment/order', {
+        planType,
+        amount,
+      });
+
+      const { orderId, keyId } = orderResponse.data;
+
+      // Step 2: Open Razorpay checkout
+      const options = {
+        key: keyId,
+        amount: amount * 100,
+        currency: 'INR',
+        name: 'Code Learning Platform',
+        description: `${planType} Plan Subscription`,
+        order_id: orderId,
+        handler: async (response: any) => {
+          try {
+            // Step 3: Verify payment
+            const verifyResponse = await axios.post('/api/payment/verify', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            if (verifyResponse.data.success) {
+              toast.success(`Welcome to ${planType}! Payment successful.`);
+              setCurrentPlan(planType);
+              setTimeout(() => {
+                router.push('/dashboard');
+              }, 2000);
+            }
+          } catch (error) {
+            toast.error('Payment verification failed');
+            console.error(error);
+          }
+        },
+        prefill: {
+          name: 'User Name',
+          email: 'user@example.com',
+        },
+        theme: {
+          color: '#000000',
+        },
+      };
+
+      // Load Razorpay script if not already loaded
+      if (!(window as any).Razorpay) {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        script.onload = () => {
+          const rzp = new (window as any).Razorpay(options);
+          rzp.open();
+        };
+        document.body.appendChild(script);
+      } else {
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+      }
+    } catch (error) {
+      toast.error('Failed to create payment order');
+      console.error(error);
+    } finally {
+      setLoading(null);
+    }
+  };
+
   return (
     <div className="min-h-screen font-game">
       {/* Hero Section */}
@@ -102,23 +214,40 @@ export default function PricingPage() {
                     <span className="font-game text-5xl font-bold text-white">
                       ${tier.price}
                     </span>
-                    {tier.price > 0 && (
-                      <span className="text-gray-400 text-base">/month</span>
-                    )}
                   </div>
                 </div>
 
                 {/* CTA Button */}
-                <Button
-                  variant={tier.isPopular ? 'pixel' : 'outline'}
-                  size="lg"
-                  className={`w-full font-game text-lg mb-8 cursor-pointer ${
-                    !tier.isPopular &&
-                    'border-2 border-gray-500 text-white hover:bg-gray-700'
-                  }`}
-                >
-                  {tier.cta}
-                </Button>
+                <div className="mb-8">
+                  {currentPlan === tier.name ? (
+                    <div className="w-full">
+                      <Button
+                        variant={tier.isPopular ? 'pixel' : 'outline'}
+                        size="lg"
+                        className={`w-full font-game text-lg cursor-not-allowed opacity-60 ${
+                          !tier.isPopular &&
+                          'border-2 border-gray-500 text-white'
+                        }`}
+                        disabled
+                      >
+                        Current Plan
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      variant={tier.isPopular ? 'pixel' : 'outline'}
+                      size="lg"
+                      className={`w-full font-game text-lg cursor-pointer ${
+                        !tier.isPopular &&
+                        'border-2 border-gray-500 text-white hover:bg-gray-700'
+                      }`}
+                      onClick={() => handlePayment(tier.name, tier.price)}
+                      disabled={loading === tier.name}
+                    >
+                      {loading === tier.name ? 'Processing...' : tier.cta}
+                    </Button>
+                  )}
+                </div>
 
                 {/* Features List */}
                 <div className="space-y-4">

@@ -1,10 +1,15 @@
 'use client';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 
 export const WelcomeBanner = () => {
   const { user } = useAuth();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <div className="flex gap-3 items-center">
@@ -15,7 +20,8 @@ export const WelcomeBanner = () => {
         height={120}
       />
       <h2 className="font-game text-2xl p-4 border bg-zinc-800 rounded-lg rounded-bl-none">
-        Welcome Back <span className="text-yellow-500">{user?.name}</span>,
+        Welcome Back{' '}
+        {isMounted && <span className="text-yellow-500">{user?.name}</span>},
         Start Learning something new...
       </h2>
     </div>
