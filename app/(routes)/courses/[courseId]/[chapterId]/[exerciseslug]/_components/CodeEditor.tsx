@@ -5,7 +5,7 @@ import {
   SandpackPreview,
   useSandpack,
 } from '@codesandbox/sandpack-react';
-import dynamic from 'next/dynamic';
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import type { courseExercise } from '../page';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -14,10 +14,6 @@ import { useParams } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useState } from 'react';
-
-const SplitterLayout = dynamic(() => import('react-splitter-layout'), {
-  ssr: false,
-});
 
 type Props = {
   courseExerciseData: courseExercise | undefined;
@@ -117,26 +113,26 @@ export function CodeEditor({ courseExerciseData, loading }: Props) {
         }}
       >
         <SandpackLayout style={{ height: '100%' }}>
-          <SplitterLayout
-            percentage
-            primaryMinSize={30}
-            secondaryMinSize={30}
-            secondaryInitialSize={50}
-          >
-            <div className="relative h-full">
-              <SandpackCodeEditor style={{ height: '100%' }} showTabs />
-              <CodeEditorChildren
-                onCompletedExercise={onCompletedExercise}
-                IsCompleted={IsCompleted}
+          <PanelGroup direction="horizontal">
+            <Panel defaultSize={50} minSize={30}>
+              <div className="relative h-full">
+                <SandpackCodeEditor style={{ height: '100%' }} showTabs />
+                <CodeEditorChildren
+                  onCompletedExercise={onCompletedExercise}
+                  IsCompleted={IsCompleted}
+                />
+              </div>
+            </Panel>
+            <PanelResizeHandle />
+            <Panel defaultSize={50} minSize={30}>
+              <SandpackPreview
+                style={{ height: '100%' }}
+                showNavigator
+                showOpenInCodeSandbox={false}
+                showOpenNewtab
               />
-            </div>
-            <SandpackPreview
-              style={{ height: '100%' }}
-              showNavigator
-              showOpenInCodeSandbox={false}
-              showOpenNewtab
-            />
-          </SplitterLayout>
+            </Panel>
+          </PanelGroup>
         </SandpackLayout>
       </SandpackProvider>
     </div>

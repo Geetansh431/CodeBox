@@ -1,15 +1,9 @@
 'use client';
 import axios from 'axios';
-import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-
-const SplitterLayout = dynamic(() => import('react-splitter-layout'), {
-  ssr: false,
-});
-
-import 'react-splitter-layout/lib/index.css';
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import { CompletedExercises, exercise } from '../../../_components/CourseList';
 import { ContentSection } from './_components/ContentSection';
 import { CodeEditor } from './_components/CodeEditor';
@@ -101,21 +95,24 @@ function Playground() {
     : '';
 
   return (
-    <div className="border-t-4">
-      <SplitterLayout percentage primaryMinSize={40} secondaryInitialSize={60}>
-        <div>
-          <ContentSection
-            exerciseData={courseExerciseData?.exerciseData}
-            loading={loading}
-          />
-        </div>
-        <div>
+    <div className="border-t-4 h-screen flex flex-col">
+      <PanelGroup direction="horizontal" className="flex-1">
+        <Panel defaultSize={40} minSize={40}>
+          <div className="h-full overflow-y-auto">
+            <ContentSection
+              exerciseData={courseExerciseData?.exerciseData}
+              loading={loading}
+            />
+          </div>
+        </Panel>
+        <PanelResizeHandle />
+        <Panel defaultSize={60} minSize={20}>
           <CodeEditor
             courseExerciseData={courseExerciseData}
             loading={loading}
           />
-        </div>
-      </SplitterLayout>
+        </Panel>
+      </PanelGroup>
       <div className="font-game fixed bottom-0 w-full bg-zinc-900 flex p-4 justify-between items-center">
         <Link href={previousRoute}>
           <Button variant={'pixel'} className="text-xl">
