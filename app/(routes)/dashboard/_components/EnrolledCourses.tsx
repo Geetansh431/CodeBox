@@ -22,6 +22,8 @@ export function EnrolledCourses() {
     []
   );
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
   useEffect(() => {
     GetUserEnrolledCourses();
   }, []);
@@ -32,11 +34,23 @@ export function EnrolledCourses() {
     setEnrolledCourses(result.data);
     setLoading(false);
   };
+
+  const filteredCourses = enrolledCourses.filter((course) =>
+    course.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="mt-8">
-      <h2 className="text-3xl mb-2 font-game">Your Enrolled Courses</h2>
-      {loading && <Skeleton className="w-full rounded-2xl my-5" />}
-      {enrolledCourses.length === 0 ? (
+      <h2 className="text-3xl mb-4 font-game">Your Enrolled Courses</h2>
+      {loading ? (
+        <div className="flex gap-5 pb-2">
+          {[1, 2].map((i) => (
+            <div key={i} className="flex-shrink-0 min-w-[calc(50%-10px)]">
+              <Skeleton className="w-full h-64 rounded-2xl" />
+            </div>
+          ))}
+        </div>
+      ) : enrolledCourses.length === 0 ? (
         <div className="flex flex-col items-center gap-3 p-7 border rounded-2xl bg-zinc-900">
           <Image src={'/books.png'} alt="book" height={90} width={90} />
           <h2 className="font-game">You Don't have any enrolled courses</h2>
@@ -47,10 +61,30 @@ export function EnrolledCourses() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-5">
-          {enrolledCourses?.map((course, index) => (
-            <CourseProgressCard key={course.courseId} course={course} />
-          ))}
+        <div>
+          <input
+            type="text"
+            placeholder="Search courses..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="font-game w-full px-4 py-2 mb-4 rounded-lg bg-zinc-800 border border-zinc-700 text-white placeholder-zinc-400 focus:outline-none focus:border-zinc-500"
+          />
+          {filteredCourses.length === 0 ? (
+            <div className="flex justify-center items-center p-7 text-zinc-400">
+              No courses found matching "{searchQuery}"
+            </div>
+          ) : (
+            <div className="flex gap-5 overflow-x-auto pb-2">
+              {filteredCourses?.map((course) => (
+                <div
+                  key={course.courseId}
+                  className="flex-shrink-0 min-w-[calc(50%-10px)]"
+                >
+                  <CourseProgressCard course={course} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>

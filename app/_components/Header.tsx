@@ -8,17 +8,10 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { LogOut, User, ChevronDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function Header() {
   const { user, isAuthenticated, isLoading, logout } = useAuth();
@@ -59,7 +52,7 @@ export function Header() {
       </NavigationMenu>
       {/* Auth Buttons */}
       {isLoading ? (
-        <div className="w-[120px] h-[44px]" />
+        <Skeleton className="w-[120px] h-[32px] rounded-lg" />
       ) : !isAuthenticated ? (
         <Link href={'/sign-up'}>
           <Button className="font-game text-2xl" variant="pixel">
@@ -73,39 +66,6 @@ export function Header() {
               Dashboard
             </Button>
           </Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold">
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}
-                </div>
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <div className="px-2 py-1.5 text-sm font-medium">
-                {user?.name}
-              </div>
-              <div className="px-2 py-1 text-xs text-muted-foreground">
-                {user?.email}
-              </div>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/profile" className="cursor-pointer">
-                  <User className="mr-2 h-4 w-4" />
-                  Profile
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={logout}
-                className="cursor-pointer text-red-500 focus:text-red-500"
-              >
-                <LogOut className="mr-2 h-4 w-4" />
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       )}
     </div>

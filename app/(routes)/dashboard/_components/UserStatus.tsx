@@ -3,10 +3,34 @@ import Image from 'next/image';
 import React, { useContext } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { UserDetailContext } from '@/context/UserDetailContext';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function UserStatus() {
   const { user } = useAuth();
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
+
+  if (!user) {
+    return (
+      <div className="p-4 border-4 rounded-2xl">
+        <div className="flex gap-3 items-center mb-4">
+          <Skeleton className="w-[70px] h-[70px] rounded-full" />
+          <Skeleton className="w-32 h-6 rounded-lg" />
+        </div>
+        <div className="grid grid-cols-2 gap-5">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex gap-3 items-center">
+              <Skeleton className="w-[35px] h-[35px] rounded-full" />
+              <div className="flex-1">
+                <Skeleton className="w-12 h-8 rounded-lg mb-2" />
+                <Skeleton className="w-24 h-5 rounded-lg" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 border-4 rounded-2xl">
       <div className="flex gap-3 items-center">
