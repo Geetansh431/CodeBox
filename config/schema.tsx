@@ -14,6 +14,9 @@ export const usersTable = pgTable('users', {
   points: integer().default(0),
   subscription: varchar(),
   createdAt: timestamp().defaultNow(),
+  streak: integer().default(0),
+  lastActivityDate: varchar({ length: 10 }), // Format: YYYY-MM-DD
+  longestStreak: integer().default(0),
 });
 
 export const CoursesTable = pgTable('courses', {

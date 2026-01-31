@@ -8,6 +8,7 @@ import {
   useCallback,
 } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export interface User {
   id: number;
@@ -15,6 +16,9 @@ export interface User {
   email: string;
   points: number | null;
   subscription: string | null;
+  streak: number | null;
+  lastActivityDate: string | null;
+  longestStreak: number | null;
 }
 
 interface AuthContextType {
@@ -32,6 +36,7 @@ interface AuthContextType {
   ) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  updateStreak: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -136,6 +141,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateStreak = async () => {
+    try {
+      // Get local date in YYYY-MM-DD format
+      const localDate = new Date().toISOString().split('T')[0];
+
+      const response = await axios.patch('/api/user', { localDate });
+
+      if (response.data.success && response.data.user) {
+        setUser(response.data.user);
+        sessionStorage.setItem('user', JSON.stringify(response.data.user));
+      }
+    } catch (error) {
+      console.error('Error updating streak:', error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -146,6 +167,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         register,
         logout,
         refreshUser,
+        updateStreak,
       }}
     >
       {children}

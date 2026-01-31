@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import { useEffect } from 'react';
 import { WelcomeBanner } from './_components/WelcomeBanner';
 import { EnrolledCourses } from './_components/EnrolledCourses';
 import { ExploreMore } from './_components/ExploreMore';
@@ -6,8 +8,15 @@ import { InviteFriend } from './_components/InviteFriend';
 import { UserStatus } from './_components/UserStatus';
 import { UpgradeToPro } from './_components/UpgradeToPro';
 import { AccountActions } from './_components/AccountActions';
+import { useAuth } from '@/context/AuthContext';
 
 export function Dashboard() {
+  const { updateStreak } = useAuth();
+
+  useEffect(() => {
+    updateStreak();
+  }, []);
+
   return (
     <div className="p-10 md:px-20 lg:px-36 xl:px-48">
       <div className="grid grid-cols-3 gap-7">
