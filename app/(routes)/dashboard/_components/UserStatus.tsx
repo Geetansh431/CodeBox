@@ -42,19 +42,12 @@ export function UserStatus() {
         />
         <h2 className="font-game text-xl">{user?.email}</h2>
       </div>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-2 gap-5 px-4">
         <div className="flex gap-3 items-center">
           <Image src={'/star.png'} alt="star" width={35} height={35} />
           <div>
-            <h2 className="text-3xl font-game">{user?.points || 0}</h2>
-            <h2 className="font-game text-gray-500 text-xl">Total Rewards</h2>
-          </div>
-        </div>
-        <div className="flex gap-3 items-center">
-          <Image src={'/badge.png'} alt="star" width={35} height={35} />
-          <div>
-            <h2 className="text-3xl font-game">3</h2>
-            <h2 className="font-game text-gray-500 text-xl">Badge</h2>
+            <h2 className="text-3xl font-game px-5">{user?.points || 0}</h2>
+            <h2 className="font-game text-gray-500 text-xl px-5">Points</h2>
           </div>
         </div>
         <div className="flex gap-3 items-center">

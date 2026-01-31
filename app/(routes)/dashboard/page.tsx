@@ -5,6 +5,7 @@ import { ExploreMore } from './_components/ExploreMore';
 import { InviteFriend } from './_components/InviteFriend';
 import { UserStatus } from './_components/UserStatus';
 import { UpgradeToPro } from './_components/UpgradeToPro';
+import { AccountActions } from './_components/AccountActions';
 
 export function Dashboard() {
   return (
@@ -19,6 +20,7 @@ export function Dashboard() {
         <div>
           <UserStatus />
           <UpgradeToPro />
+          <AccountActions />
         </div>
       </div>
     </div>
