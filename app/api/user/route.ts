@@ -140,3 +140,22 @@ export async function PATCH(request: Request) {
     user: updateResult[0],
   });
 }
+
+export async function DELETE() {
+  const session = await getCurrentUser();
+
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    await db.delete(usersTable).where(eq(usersTable.id, session.userId));
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to delete user' },
+      { status: 500 }
+    );
+  }
+}
