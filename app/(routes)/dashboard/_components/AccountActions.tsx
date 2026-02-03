@@ -6,11 +6,13 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Lock, LogOut, Trash2, AlertCircle } from 'lucide-react';
+import { ChangePasswordModal } from './ChangePasswordModal';
 
 export function AccountActions() {
   const { logout } = useAuth();
   const router = useRouter();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -27,7 +29,7 @@ export function AccountActions() {
   };
 
   const handleChangePassword = () => {
-    router.push('/change-password');
+    setShowChangePassword(true);
   };
 
   const handleDeleteAccount = async () => {
@@ -115,6 +117,11 @@ export function AccountActions() {
           </div>
         </div>
       )}
+
+      <ChangePasswordModal
+        open={showChangePassword}
+        onOpenChange={setShowChangePassword}
+      />
     </div>
   );
 }
