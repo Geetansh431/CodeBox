@@ -76,3 +76,13 @@ export const PaymentsTable = pgTable('payments', {
   createdAt: timestamp().defaultNow(),
   updatedAt: timestamp().defaultNow(),
 });
+
+export const ContactTable = pgTable('contact', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  name: varchar({ length: 255 }).notNull(),
+  email: varchar({ length: 255 }).notNull(),
+  subject: varchar({ length: 255 }).notNull(),
+  message: varchar({ length: 5000 }).notNull(),
+  status: varchar().default('new'), // new, read, replied
+  createdAt: timestamp().defaultNow(),
+});
