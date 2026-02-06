@@ -6,8 +6,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import crypto from 'crypto';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(req: NextRequest) {
   try {
     const session = await getCurrentUser();
@@ -97,6 +95,7 @@ export async function POST(req: NextRequest) {
       })
       .returning();
 
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const appUrl = process.env.NEXT_PUBLIC_APP_URL;
     const referralLink = `${appUrl}/sign-up?ref=${referralCode}`;
 
