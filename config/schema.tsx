@@ -17,6 +17,7 @@ export const usersTable = pgTable('users', {
   streak: integer().default(0),
   lastActivityDate: varchar({ length: 10 }), // Format: YYYY-MM-DD
   longestStreak: integer().default(0),
+  referredBy: integer(),
 });
 
 export const CoursesTable = pgTable('courses', {
@@ -75,6 +76,15 @@ export const PaymentsTable = pgTable('payments', {
   status: varchar().default('created'),
   createdAt: timestamp().defaultNow(),
   updatedAt: timestamp().defaultNow(),
+});
+
+export const InvitationsTable = pgTable('invitations', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  inviterId: integer().notNull(),
+  inviteeEmail: varchar({ length: 255 }).notNull(),
+  referralCode: varchar({ length: 20 }).notNull().unique(),
+  status: varchar({ length: 20 }).default('pending'), // pending, accepted
+  createdAt: timestamp().defaultNow(),
 });
 
 export const ContactTable = pgTable('contact', {

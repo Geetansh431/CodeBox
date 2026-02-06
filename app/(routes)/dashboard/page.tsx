@@ -23,7 +23,6 @@ export function Dashboard() {
         <div className="col-span-2">
           <WelcomeBanner />
           <EnrolledCourses />
-          <ExploreMore />
           <InviteFriend />
         </div>
         <div>

@@ -1,12 +1,12 @@
 import { db } from '@/config/db';
-import { usersTable } from '@/config/schema';
+import { usersTable, InvitationsTable } from '@/config/schema';
 import { hashPassword, generateToken, setAuthCookie } from '@/lib/auth';
-import { eq } from 'drizzle-orm';
+import { eq, and, sql } from 'drizzle-orm';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, password } = await req.json();
+    const { name, email, password, referralCode } = await req.json();
 
     // Validate input
     if (!name || !email || !password) {
@@ -59,6 +59,45 @@ export async function POST(req: NextRequest) {
         points: 0,
       })
       .returning();
+
+    // Handle referral code if provided
+    if (referralCode) {
+      const [invitation] = await db
+        .select()
+        .from(InvitationsTable)
+        .where(
+          and(
+            eq(InvitationsTable.referralCode, referralCode),
+            eq(InvitationsTable.status, 'pending')
+          )
+        );
+
+      if (invitation) {
+        await db
+          .update(InvitationsTable)
+          .set({ status: 'accepted' })
+          .where(eq(InvitationsTable.id, invitation.id));
+
+        await db
+          .update(usersTable)
+          .set({ referredBy: invitation.inviterId })
+          .where(eq(usersTable.id, newUser.id));
+
+        // Award 25 points to invitee
+        await db
+          .update(usersTable)
+          .set({ points: sql`${usersTable.points} + 25` })
+          .where(eq(usersTable.id, newUser.id));
+
+        // Award 50 points to inviter
+        await db
+          .update(usersTable)
+          .set({ points: sql`${usersTable.points} + 50` })
+          .where(eq(usersTable.id, invitation.inviterId));
+
+        newUser.points = (newUser.points || 0) + 25;
+      }
+    }
 
     // Generate JWT token
     const token = await generateToken({
